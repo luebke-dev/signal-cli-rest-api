@@ -1,0 +1,5 @@
+__pycache__
+.vscode
+signal-cli-config
+poetry.lock
+dist

@@ -1,0 +1,11 @@
+version: "3"
+services:
+  signal:
+    image: sebastiannoelluebke/signal-cli-rest-api
+    container_name: signal-cli-rest-api
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - "./signal-cli-config:/root/.local/share/signal-cli"

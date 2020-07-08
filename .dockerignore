@@ -1,0 +1,9 @@
+signal-cli-config
+dist
+.vscode
+scripts
+.gitignore
+docker-compose.yml
+Dockerfile
+__pycache__
+.pytest_cache

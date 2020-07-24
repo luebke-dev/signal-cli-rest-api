@@ -34,7 +34,7 @@ class GroupInfo(BaseModel):
 
 
 class DataMessage(BaseModel):
-    timestamp: datetime
+    timestamp: str
     message: Optional[str] = None
     expiresInSeconds: int
     attachments: Optional[List[AttachmentOut]] = None
@@ -45,7 +45,7 @@ class Envelope(BaseModel):
     source: str
     sourceDevice: int
     relay: Any
-    timestamp: datetime
+    timestamp: str
     isReceipt: bool
     dataMessage: Optional[DataMessage] = None
 
@@ -55,3 +55,11 @@ class MessageIncoming(BaseModel):
     syncMessage: Any
     callMessage: Any
     receiptMessage: Any
+
+
+class ReactionOut(BaseModel):
+    receiver: str
+    group: bool = False
+    target_number: str
+    target_timestamp: str
+    emoji: str

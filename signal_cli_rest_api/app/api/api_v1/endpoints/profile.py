@@ -10,7 +10,7 @@ router = APIRouter()
 @router.put("/{number}", response_model=ProfileUpdate)
 def update_profile(profile: ProfileUpdate, number: str) -> Any:
     """
-    Edit a group. You can't remove a member from a group
+    updates your profile
     """
 
     cmd = ["-u", number, "updateProfile"]

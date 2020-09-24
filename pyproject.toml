@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "signal-cli-rest-api"
-version = "0.1.95"
+version = "0.1.96"
 description = ""
 readme = "README.md"
 repository = "https://github.com/SebastianLuebke/signal-cli-rest-api"

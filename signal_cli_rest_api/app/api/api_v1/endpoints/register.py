@@ -9,10 +9,10 @@ import pyqrcode
 router = APIRouter()
 
 
-@router.get("/{number}/link")
+@router.post("/{number}/link")
 def link_device(number: str) -> Any:
     response = run_signal_cli_command(["link"], False)
-    print(response)
+    response = response.rstrip(b"\n")
     buf = BytesIO()
     qr = pyqrcode.create(response, error='L')
     qr.png(buf, scale=3)

@@ -1,7 +1,7 @@
-FROM python:3.8.3-buster
+FROM python:3.8.6-alpine
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends wget default-jre software-properties-common git locales
+RUN apk update \
+    && apk add --no-cache curl openjdk11-jre git gcc make musl-dev
 
 # Install Poetry & disable virtualenv creation
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
@@ -26,4 +26,4 @@ COPY ./docker-start.sh ./start.sh
 RUN chmod +x start.sh
 COPY ./signal_cli_rest_api/ signal_cli_rest_api/
 EXPOSE 8000
-CMD ["bash", "start.sh"]
+CMD ["/bin/sh", "start.sh"]

@@ -1,8 +1,12 @@
 from signal_cli_rest_api.app.schemas import GroupCreate, GroupUpdate, GroupOut
-from signal_cli_rest_api.app.utils import run_signal_cli_command, read_groups, save_attachment
+from signal_cli_rest_api.app.utils import (
+    run_signal_cli_command,
+    read_groups,
+    save_attachment,
+)
 from signal_cli_rest_api.app.config import settings
 from typing import Any, List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -31,14 +35,12 @@ def create_group(group: GroupCreate, number: str) -> Any:
     Create Group
     """
 
-    cmd = ["updateGroup", "-n",
-           group.name]
+    cmd = ["updateGroup", "-n", group.name]
 
     if group.avatar:
         cmd.append("-a")
         save_attachment(group.avatar)
-        cmd.append(
-            f"{settings.signal_upload_path}{group.avatar.filename}")
+        cmd.append(f"{settings.signal_upload_path}{group.avatar.filename}")
 
     cmd += ["-m"]
     cmd += group.members
@@ -62,8 +64,7 @@ def edit_group(id: str, group: GroupUpdate, number: str) -> Any:
     if group.avatar:
         cmd.append("-a")
         save_attachment(group.avatar)
-        cmd.append(
-            f"{settings.signal_upload_path}{group.avatar.filename}")
+        cmd.append(f"{settings.signal_upload_path}{group.avatar.filename}")
 
     if len(group.members) > 0:
         cmd += ["-m"]

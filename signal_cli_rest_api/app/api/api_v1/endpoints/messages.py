@@ -1,9 +1,15 @@
 from typing import Any, List
-from fastapi import APIRouter
-from signal_cli_rest_api.app.schemas import MessageIncoming, MessageOutgoing, MessageSent, ReactionOut
+from fastapi import APIRouter, BackgroundTasks
+from signal_cli_rest_api.app.schemas import (
+    MessageIncoming,
+    MessageOutgoing,
+    MessageSent,
+    ReactionOut,
+)
 from signal_cli_rest_api.app.utils import run_signal_cli_command, save_attachment
 from signal_cli_rest_api.app.config import settings
 import json
+import os
 
 router = APIRouter()
 
@@ -19,7 +25,9 @@ def get_messages(number: str) -> Any:
 
 
 @router.post("/{number}", response_model=MessageSent, status_code=201)
-def send_message(message: MessageOutgoing, number: str) -> Any:
+def send_message(
+    message: MessageOutgoing, number: str, background_tasks: BackgroundTasks
+) -> Any:
     """
     send message
     """
@@ -32,7 +40,9 @@ def send_message(message: MessageOutgoing, number: str) -> Any:
         cmd.append("-a")
         for attachment in message.attachments:
             save_attachment(attachment)
-            cmd.append(f"{settings.signal_upload_path}{attachment.filename}")
+            attachment_path = f"{settings.signal_upload_path}{attachment.filename}"
+            cmd.append(attachment_path)
+            background_tasks.add_task(os.remove, attachment_path)
 
     if message.group:
         cmd.append("-g")
@@ -56,8 +66,14 @@ def send_reaction(number: str, reaction: ReactionOut) -> Any:
     else:
         cmd.append(reaction.receiver)
 
-    cmd += ["-a", reaction.target_number, "-t",
-            reaction.target_timestamp, "-e", reaction.emoji]
+    cmd += [
+        "-a",
+        reaction.target_number,
+        "-t",
+        reaction.target_timestamp,
+        "-e",
+        reaction.emoji,
+    ]
 
     run_signal_cli_command(cmd)
 
@@ -74,7 +90,14 @@ def delete_reaction(number: str, reaction: ReactionOut) -> Any:
     else:
         cmd.append(reaction.receiver)
 
-    cmd += ["-a", reaction.target_number, "-t",
-            reaction.target_timestamp, "-e", reaction.emoji, "-r"]
+    cmd += [
+        "-a",
+        reaction.target_number,
+        "-t",
+        reaction.target_timestamp,
+        "-e",
+        reaction.emoji,
+        "-r",
+    ]
 
     run_signal_cli_command(cmd)

@@ -10,7 +10,7 @@ RUN wget -q -O - https://raw.githubusercontent.com/python-poetry/poetry/master/g
     poetry config virtualenvs.create false
 
 # Download & Install signal-cli
-ENV SIGNAL_CLI_VERSION=0.6.10
+ENV SIGNAL_CLI_VERSION=0.6.11
 RUN cd /tmp/ \
     && wget https://github.com/AsamK/signal-cli/releases/download/v"${SIGNAL_CLI_VERSION}"/signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz \
     && tar xf signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz -C /opt \

@@ -1,14 +1,15 @@
 from signal_cli_rest_api.app.schemas import ProfileUpdate
 from signal_cli_rest_api.app.utils import run_signal_cli_command, save_attachment
 from signal_cli_rest_api.app.config import settings
-from typing import Any, List
-from fastapi import APIRouter, Depends
+from typing import Any
+from fastapi import APIRouter, BackgroundTasks
+import os
 
 router = APIRouter()
 
 
 @router.put("/{number}", response_model=ProfileUpdate)
-def update_profile(profile: ProfileUpdate, number: str) -> Any:
+def update_profile(profile: ProfileUpdate, number: str, background_tasks: BackgroundTasks) -> Any:
     """
     updates your profile
     """
@@ -23,8 +24,9 @@ def update_profile(profile: ProfileUpdate, number: str) -> Any:
     elif profile.avatar:
         cmd.append("--avatar")
         save_attachment(profile.avatar)
-        cmd.append(
-            f"{settings.signal_upload_path}{profile.avatar.filename}")
+        attachment_path = f"{settings.signal_upload_path}{profile.avatar.filename}"
+        cmd.append(attachment_path)
+        background_tasks.add_task(os.remove, attachment_path)
 
     run_signal_cli_command(cmd)
 

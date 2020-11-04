@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from signal_cli_rest_api.app.api.api_v1.api import api_router
 from .config import settings
 import os
+
 app = FastAPI(title="signal-cli-rest-api")
 
 app.include_router(api_router)

@@ -1,5 +1,5 @@
-from typing import Any, List
-from fastapi import APIRouter, Body, Depends
+from typing import Any
+from fastapi import APIRouter
 from signal_cli_rest_api.app.schemas import Block
 from signal_cli_rest_api.app.utils import run_signal_cli_command
 

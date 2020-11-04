@@ -1,6 +1,7 @@
 FROM python:3.8-alpine
 
-RUN apk add --no-cache openjdk11-jre gcc make musl-dev
+RUN apk add --no-cache openjdk11-jre
+RUN apk add --no-cache --virtual build-dependencies gcc make musl-dev
 
 # Install Poetry & disable virtualenv creation
 RUN wget -q -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
@@ -21,11 +22,13 @@ gnal-cli
 #    && ./gradlew installDist \
 #    && ln -s /tmp/signal-cli/build/install/signal-cli/bin/signal-cli /usr/bin/signal-cli
 
-
 WORKDIR /usr/src/app
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY ./pyproject.toml ./poetry.lock* ./
+
 RUN poetry install --no-root --no-dev
+RUN apk del build-dependencies
+
 COPY ./docker-start.sh ./start.sh
 RUN chmod +x start.sh
 COPY ./signal_cli_rest_api/ signal_cli_rest_api/

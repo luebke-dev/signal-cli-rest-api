@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.put("/{number}", response_model=ProfileUpdate)
-def update_profile(profile: ProfileUpdate, number: str, background_tasks: BackgroundTasks) -> Any:
+async def update_profile(profile: ProfileUpdate, number: str, background_tasks: BackgroundTasks) -> Any:
     """
     updates your profile
     """
@@ -28,6 +28,6 @@ def update_profile(profile: ProfileUpdate, number: str, background_tasks: Backgr
         cmd.append(attachment_path)
         background_tasks.add_task(os.remove, attachment_path)
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
 
     return profile

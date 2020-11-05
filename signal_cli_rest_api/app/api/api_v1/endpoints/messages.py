@@ -25,7 +25,7 @@ def get_messages(number: str) -> Any:
 
 
 @router.post("/{number}", response_model=MessageSent, status_code=201)
-def send_message(
+async def send_message(
     message: MessageOutgoing, number: str, background_tasks: BackgroundTasks
 ) -> Any:
     """
@@ -47,13 +47,13 @@ def send_message(
     if message.group:
         cmd.append("-g")
 
-    response = run_signal_cli_command(cmd)
+    response = await run_signal_cli_command(cmd)
 
     return MessageSent(**message.dict(), timestamp=response.split("\n")[0])
 
 
 @router.post("/{number}/reaction")
-def send_reaction(number: str, reaction: ReactionOut) -> Any:
+async def send_reaction(number: str, reaction: ReactionOut) -> Any:
     """
     send a reaction
 
@@ -75,11 +75,11 @@ def send_reaction(number: str, reaction: ReactionOut) -> Any:
         reaction.emoji,
     ]
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
 
 
 @router.delete("/{number}/reaction")
-def delete_reaction(number: str, reaction: ReactionOut) -> Any:
+async def delete_reaction(number: str, reaction: ReactionOut) -> Any:
     """
     remove a reaction
     """
@@ -100,4 +100,4 @@ def delete_reaction(number: str, reaction: ReactionOut) -> Any:
         "-r",
     ]
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)

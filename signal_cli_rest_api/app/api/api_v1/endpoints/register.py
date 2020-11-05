@@ -10,8 +10,8 @@ router = APIRouter()
 
 
 @router.post("/{number}/link")
-def link_device(number: str) -> Any:
-    response = run_signal_cli_command(["link"], False)
+async def link_device(number: str) -> Any:
+    response = await run_signal_cli_command(["link"], False)
     response = response.rstrip(b"\n")
     buf = BytesIO()
     qr = pyqrcode.create(response, error="L")
@@ -21,13 +21,13 @@ def link_device(number: str) -> Any:
 
 
 @router.post("/{number}/update-account")
-def update_account(number: str) -> Any:
-    response = run_signal_cli_command(["-u", number, "updateAccount"])
+async def update_account(number: str) -> Any:
+    response = await run_signal_cli_command(["-u", number, "updateAccount"])
     return response
 
 
 @router.post("/{number}", response_model=Registration)
-def register_number(registration: Registration, number: str) -> Any:
+async def register_number(registration: Registration, number: str) -> Any:
     """
     register a new number
     """
@@ -37,12 +37,12 @@ def register_number(registration: Registration, number: str) -> Any:
     if registration.voice_verification:
         cmd.append("--voice")
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
     return registration
 
 
 @router.post("/{number}/verify", response_model=Verification)
-def verify_registration(verification: Verification, number: str) -> Any:
+async def verify_registration(verification: Verification, number: str) -> Any:
     """
     verify a registration, using the installation pin is currently not supported by signal-cli
     """
@@ -52,5 +52,5 @@ def verify_registration(verification: Verification, number: str) -> Any:
     if verification.pin:
         cmd.extend(["-p", verification.pin])
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
     return verification

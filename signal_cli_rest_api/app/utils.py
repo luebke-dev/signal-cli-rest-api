@@ -1,11 +1,10 @@
-import subprocess
-from subprocess import CalledProcessError
 from fastapi import HTTPException
 from typing import Any, List
 from .schemas import AttachmentIn
 from .config import settings
 import requests
 import base64
+import asyncio
 
 ALGORITHM = "HS256"
 
@@ -46,7 +45,7 @@ def read_groups(groups_string: str):
                 "members": members,
             }
         )
-
+                   
     return groups
 
 
@@ -66,19 +65,17 @@ def save_attachment(attachment: AttachmentIn):
         file.write(content)
 
 
-def run_signal_cli_command(cmd: List[str], wait: bool = True) -> Any:
+async def run_signal_cli_command(cmd: List[str], wait: bool = True) -> Any:
     base_cmd = ["signal-cli", "--config", settings.signal_config_path]
 
-    full_cmd = base_cmd + cmd
+    full_cmd = " ".join(base_cmd + cmd)
+
+    process = await asyncio.subprocess.create_subprocess_shell(full_cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
     if wait:
-        try:
-            process = subprocess.check_output(full_cmd, stderr=subprocess.STDOUT)
-        except CalledProcessError as e:
-            raise HTTPException(status_code=422, detail=e.output.decode())
-        return process.decode()
-    else:
-        process = subprocess.Popen(
-            full_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        return process.stdout.readline()
+        stdout, stderr = await process.communicate()
+        if stderr:
+            raise HTTPException(status_code=500, detail=f"Starting signal-cli process failed: {stderr.decode()}")
+        return stdout.decode()
+
+    return await process.stdout.readline()

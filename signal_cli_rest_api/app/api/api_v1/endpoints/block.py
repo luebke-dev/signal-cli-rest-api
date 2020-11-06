@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.post("/{number}", response_model=Block)
-def block_numbers_or_groups(block: Block, number: str) -> Any:
+async def block_numbers_or_groups(block: Block, number: str) -> Any:
     """
     block one or multiple numbers or group id's
     """
@@ -18,13 +18,13 @@ def block_numbers_or_groups(block: Block, number: str) -> Any:
 
     cmd += block.numbers
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
 
     return block
 
 
 @router.delete("/{number}", response_model=Block)
-def unblock_numbers_or_groups(unblock: Block, number: str) -> Any:
+async def unblock_numbers_or_groups(unblock: Block, number: str) -> Any:
     """
     unblock one or multiple numbers or group id's
     """
@@ -35,6 +35,6 @@ def unblock_numbers_or_groups(unblock: Block, number: str) -> Any:
 
     cmd += unblock.numbers
 
-    run_signal_cli_command(cmd)
+    await run_signal_cli_command(cmd)
 
     return unblock

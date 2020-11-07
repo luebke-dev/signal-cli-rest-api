@@ -1,15 +1,14 @@
-from typing import Any, List
-from fastapi import APIRouter, BackgroundTasks
-from signal_cli_rest_api.app.schemas import (
-    MessageIncoming,
-    MessageOutgoing,
-    MessageSent,
-    ReactionOut,
-)
-from signal_cli_rest_api.app.utils import run_signal_cli_command, save_attachment
-from signal_cli_rest_api.app.config import settings
 import json
 import os
+from typing import Any, List
+
+from fastapi import APIRouter, BackgroundTasks
+
+from signal_cli_rest_api.app.config import settings
+from signal_cli_rest_api.app.schemas import (MessageIncoming, MessageOutgoing,
+                                             MessageSent, ReactionOut)
+from signal_cli_rest_api.app.utils import (run_signal_cli_command,
+                                           save_attachment)
 
 router = APIRouter()
 
@@ -39,7 +38,7 @@ async def send_message(
     if len(message.attachments) > 0:
         cmd.append("-a")
         for attachment in message.attachments:
-            save_attachment(attachment)
+            await save_attachment(attachment)
             attachment_path = f"{settings.signal_upload_path}{attachment.filename}"
             cmd.append(attachment_path)
             background_tasks.add_task(os.remove, attachment_path)

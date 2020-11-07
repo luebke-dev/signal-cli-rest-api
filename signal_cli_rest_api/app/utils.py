@@ -1,10 +1,14 @@
-from fastapi import HTTPException
-from typing import Any, List
-from .schemas import AttachmentIn
-from .config import settings
-import requests
-import base64
 import asyncio
+import base64
+from typing import Any, List
+
+import aiofiles
+import httpx
+import requests
+from fastapi import HTTPException
+
+from .config import settings
+from .schemas import AttachmentIn
 
 ALGORITHM = "HS256"
 
@@ -49,20 +53,21 @@ def read_groups(groups_string: str):
     return groups
 
 
-def save_attachment(attachment: AttachmentIn):
+async def save_attachment(attachment: AttachmentIn):
     if attachment.url is None and attachment.content is None:
         raise HTTPException(status_code=422)
-    with open(f"{settings.signal_upload_path}{attachment.filename}", "wb") as file:
+    async with aiofiles.open(f"{settings.signal_upload_path}{attachment.filename}", "wb") as file:
         content = b""
         if attachment.url:
-            r = requests.get(attachment.url, allow_redirects=True)
-            if r.status_code != 200:
-                raise HTTPException(status_code=400, detail="Downloading image failed")
-            content = r.content
+            async with httpx.AsyncClient() as client:
+                r = await client.get(attachment.url, allow_redirects=True)
+                if r.status_code != 200:
+                    raise HTTPException(status_code=400, detail="Downloading image failed")
+                content = r.content
         elif attachment.content:
             content = base64.b64decode(attachment.content)
 
-        file.write(content)
+        await file.write(content)
 
 
 async def run_signal_cli_command(cmd: List[str], wait: bool = True) -> Any:

@@ -1,11 +1,6 @@
-from .register import Verification, Registration
 from .block import Block
-from .group import GroupCreate, GroupUpdate, GroupOut
-from .message import (
-    MessageIncoming,
-    MessageOutgoing,
-    MessageSent,
-    AttachmentIn,
-    ReactionOut,
-)
+from .group import GroupCreate, GroupOut, GroupUpdate
+from .message import (AttachmentIn, MessageIncoming, MessageOutgoing,
+                      MessageSent, ReactionOut)
 from .profile import ProfileUpdate
+from .register import Registration, Verification

@@ -1,12 +1,8 @@
 from fastapi import APIRouter
 
-from signal_cli_rest_api.app.api.api_v1.endpoints import (
-    block,
-    groups,
-    messages,
-    register,
-    profile,
-)
+from signal_cli_rest_api.app.api.api_v1.endpoints import (block, groups,
+                                                          messages, profile,
+                                                          register)
 
 api_router = APIRouter()
 

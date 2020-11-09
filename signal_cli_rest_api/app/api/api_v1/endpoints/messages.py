@@ -14,12 +14,12 @@ router = APIRouter()
 
 
 @router.get("/{number}", response_model=List[MessageIncoming])
-def get_messages(number: str) -> Any:
+async def get_messages(number: str) -> Any:
     """
     get messages
     """
 
-    response = run_signal_cli_command(["-u", number, "receive", "--json"])
+    response = await run_signal_cli_command(["-u", number, "receive", "--json"])
     return [json.loads(m) for m in response.split("\n") if m != ""]
 
 

@@ -45,6 +45,7 @@ async def send_message(
 
     if message.group:
         cmd.append("-g")
+        cmd.append(message.groupId)
 
     response = await run_signal_cli_command(cmd)
 

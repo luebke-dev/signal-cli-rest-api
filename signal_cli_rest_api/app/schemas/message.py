@@ -14,6 +14,7 @@ class MessageOutgoing(BaseModel):
     text: str
     receivers: List[str]
     group: bool = False
+    groupId: str
     attachments: List[AttachmentIn] = []
 
 

@@ -33,7 +33,11 @@ async def send_message(
 
     cmd = ["-u", number, "send", "-m", message.text]
 
-    cmd += message.receivers
+    if message.group:
+        cmd.append("-g")
+        cmd.append(message.groupId)
+    else:
+        cmd += message.receivers
 
     if len(message.attachments) > 0:
         cmd.append("-a")
@@ -42,9 +46,6 @@ async def send_message(
             attachment_path = f"{settings.signal_upload_path}{attachment.filename}"
             cmd.append(attachment_path)
             background_tasks.add_task(os.remove, attachment_path)
-
-    if message.group:
-        cmd.append("-g")
 
     response = await run_signal_cli_command(cmd)
 

@@ -1,9 +1,17 @@
-FROM python:3.8-alpine
+FROM python:3.8-slim
 
-RUN apk add --no-cache openjdk11-jre
+# Install java
+RUN set -eux; \
+    mkdir -p /usr/share/man/man1; \
+    apt-get update; \
+    apt-get install --no-install-recommends -y \
+        openjdk-11-jre-headless \
+        wget \
+    ; \
+    rm -rf /var/lib/apt/lists/*
 
 # Download & Install signal-cli
-ENV SIGNAL_CLI_VERSION=0.7.0
+ENV SIGNAL_CLI_VERSION=0.7.1
 RUN cd /tmp/ \
     && wget https://github.com/AsamK/signal-cli/releases/download/v"${SIGNAL_CLI_VERSION}"/signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz \
     && tar xf signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz -C /opt \
@@ -15,15 +23,13 @@ WORKDIR /usr/src/app
 COPY ./pyproject.toml ./poetry.lock* ./
 
 # Install Poetry & disable virtualenv creation
-RUN wget -q -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
+RUN pip install --no-cache poetry && \
     poetry config virtualenvs.create false
-    
-RUN apk add --no-cache --virtual build-dependencies gcc make musl-dev && poetry install --no-root --no-dev && apk del build-dependencies
+
+RUN poetry install --no-root --no-dev && \
+    rm -rf ~/.cache/{pip,pypoetry}
 
 COPY ./docker-start.sh ./start.sh
-RUN chmod +x start.sh
 COPY ./signal_cli_rest_api/ signal_cli_rest_api/
 
 EXPOSE 8000

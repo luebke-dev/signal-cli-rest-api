@@ -4,7 +4,6 @@ from typing import Any, List
 
 import aiofiles
 import httpx
-import requests
 from fastapi import HTTPException
 
 from .config import settings

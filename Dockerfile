@@ -34,7 +34,6 @@ RUN poetry install --no-root --no-dev && \
     rm -rf ~/.cache/{pip,pypoetry}
 
 # Copy app
-COPY --chown=sgn:sgn ./docker-start.sh ./start.sh
 COPY --chown=sgn:sgn ./signal_cli_rest_api/ signal_cli_rest_api/
 
 # Prepare mount point for signal-cli 

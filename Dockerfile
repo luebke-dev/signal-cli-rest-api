@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 # Create signal-cli user
-ENV HOME /srv/wolke7-signal
+ENV HOME /srv/signal
 RUN addgroup --system --gid 1000 sgn && adduser --system --home $HOME --gid 1000 --uid 999 sgn
 
 # Install java
@@ -33,12 +33,13 @@ RUN pip install --no-cache poetry && \
 RUN poetry install --no-root --no-dev && \
     rm -rf ~/.cache/{pip,pypoetry}
 
+# Copy app
 COPY --chown=sgn:sgn ./docker-start.sh ./start.sh
 COPY --chown=sgn:sgn ./signal_cli_rest_api/ signal_cli_rest_api/
 
-
-RUN mkdir -p /srv/wolke7-signal/.local/share/signal-cli
-RUN chown -R sgn:sgn /srv/wolke7-signal/.local/share/signal-cli
+# Prepare mount point for signal-cli 
+RUN mkdir -p $HOME/.local/share/signal-cli
+RUN chown -R sgn:sgn $HOME/.local/share/signal-cli
 
 EXPOSE 8000
 USER sgn

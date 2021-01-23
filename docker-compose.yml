@@ -8,4 +8,4 @@ services:
     ports:
       - "127.0.0.1:8000:8000"
     volumes:
-      - "./signal-cli-config:/root/.local/share/signal-cli"
+      - "./signal-cli-config:/srv/signal/.local/share/signal-cli"

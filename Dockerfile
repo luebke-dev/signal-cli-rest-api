@@ -44,4 +44,4 @@ RUN chown -R sgn:sgn $HOME/.local/share/signal-cli
 EXPOSE 8000
 USER sgn
 
-CMD ["./start.sh"]
+CMD ["uvicorn", "signal_cli_rest_api.app.main:app", "--host", "0.0.0.0"]

@@ -1,5 +1,9 @@
 FROM python:3.8-slim
 
+# Create signal-cli user
+ENV HOME /srv/wolke7-signal
+RUN addgroup --system --gid 1000 sgn && adduser --system --home $HOME --gid 1000 --uid 999 sgn
+
 # Install java
 RUN set -eux; \
     mkdir -p /usr/share/man/man1; \
@@ -18,9 +22,9 @@ RUN cd /tmp/ \
     && ln -s /opt/signal-cli-"${SIGNAL_CLI_VERSION}"/bin/signal-cli /usr/bin/si\
 gnal-cli
 
-WORKDIR /usr/src/app
+WORKDIR $HOME
 # Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* ./
+COPY --chown=sgn:sgn ./pyproject.toml ./poetry.lock* ./
 
 # Install Poetry & disable virtualenv creation
 RUN pip install --no-cache poetry && \
@@ -29,8 +33,14 @@ RUN pip install --no-cache poetry && \
 RUN poetry install --no-root --no-dev && \
     rm -rf ~/.cache/{pip,pypoetry}
 
-COPY ./docker-start.sh ./start.sh
-COPY ./signal_cli_rest_api/ signal_cli_rest_api/
+COPY --chown=sgn:sgn ./docker-start.sh ./start.sh
+COPY --chown=sgn:sgn ./signal_cli_rest_api/ signal_cli_rest_api/
+
+
+RUN mkdir -p /srv/wolke7-signal/.local/share/signal-cli
+RUN chown -R sgn:sgn /srv/wolke7-signal/.local/share/signal-cli
 
 EXPOSE 8000
+USER sgn
+
 CMD ["./start.sh"]

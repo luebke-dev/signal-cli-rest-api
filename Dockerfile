@@ -15,7 +15,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # Download & Install signal-cli
-ENV SIGNAL_CLI_VERSION=0.7.4
+ENV SIGNAL_CLI_VERSION=0.8.1
 RUN cd /tmp/ \
     && wget https://github.com/AsamK/signal-cli/releases/download/v"${SIGNAL_CLI_VERSION}"/signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz \
     && tar xf signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz -C /opt \

@@ -1,5 +1,6 @@
 from io import BytesIO
 from typing import Any
+from shlex import quote
 
 import pyqrcode
 from fastapi import APIRouter
@@ -24,7 +25,7 @@ async def link_device(number: str) -> Any:
 
 @router.post("/{number}/update-account")
 async def update_account(number: str) -> Any:
-    response = await run_signal_cli_command(["-u", number, "updateAccount"])
+    response = await run_signal_cli_command(["-u", quote(number), "updateAccount"])
     return response
 
 
@@ -34,13 +35,13 @@ async def register_number(registration: Registration, number: str) -> Any:
     register a new number
     """
 
-    cmd = ["-u", number, "register"]
+    cmd = ["-u", quote(number), "register"]
 
     if registration.voice_verification:
         cmd.append("--voice")
 
     if registration.captcha:
-        cmd.append(["--captcha", registration.captcha] )
+        cmd.append(["--captcha", quote(registration.captcha)] )
 
     await run_signal_cli_command(cmd)
     return registration
@@ -52,10 +53,10 @@ async def verify_registration(verification: Verification, number: str) -> Any:
     verify a registration, using the installation pin is currently not supported by signal-cli
     """
 
-    cmd = ["-u", number, "verify", verification.verification_code]
+    cmd = ["-u", quote(number), "verify", quote(verification.verification_code)]
 
     if verification.pin:
-        cmd.extend(["-p", verification.pin])
+        cmd.extend(["-p", quote(verification.pin)])
 
     await run_signal_cli_command(cmd)
     return verification

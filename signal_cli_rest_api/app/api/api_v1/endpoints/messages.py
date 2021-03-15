@@ -20,7 +20,7 @@ async def get_messages(number: str) -> Any:
     get messages
     """
 
-    response = await run_signal_cli_command(["-u", number, "receive", "--json"])
+    response = await run_signal_cli_command(["-u", quote(number), "receive", "--json"])
     return [json.loads(m) for m in response.split("\n") if m != ""]
 
 
@@ -32,13 +32,13 @@ async def send_message(
     send message
     """
 
-    cmd = ["-u", number, "send", "-m", quote(message.text)]
+    cmd = ["-u", quote(number), "send", "-m", quote(message.text)]
 
     if message.group:
         cmd.append("-g")
         cmd.append(quote(message.groupId))
     else:
-        cmd += message.receivers
+        cmd += list(map(quote, message.receivers))
 
     if len(message.attachments) > 0:
         cmd.append("-a")
@@ -60,20 +60,20 @@ async def send_reaction(number: str, reaction: ReactionOut) -> Any:
 
     https://emojipedia.org/
     """
-    cmd = ["-u", number, "sendReaction"]
+    cmd = ["-u", quote(number), "sendReaction"]
 
     if reaction.group:
-        cmd += ["-g", reaction.receiver]
+        cmd += ["-g", quote(reaction.receiver)]
     else:
-        cmd.append(reaction.receiver)
+        cmd.append(quote(reaction.receiver))
 
     cmd += [
         "-a",
-        reaction.target_number,
+        quote(reaction.target_number),
         "-t",
-        reaction.target_timestamp,
+        quote(reaction.target_timestamp),
         "-e",
-        reaction.emoji,
+        quote(reaction.emoji),
     ]
 
     await run_signal_cli_command(cmd)
@@ -84,20 +84,20 @@ async def delete_reaction(number: str, reaction: ReactionOut) -> Any:
     """
     remove a reaction
     """
-    cmd = ["-u", number, "sendReaction"]
+    cmd = ["-u", quote(number), "sendReaction"]
 
     if reaction.group:
-        cmd += ["-g", reaction.receiver]
+        cmd += ["-g", quote(reaction.receiver)]
     else:
-        cmd.append(reaction.receiver)
+        cmd.append(quote(reaction.receiver))
 
     cmd += [
         "-a",
-        reaction.target_number,
+        quote(reaction.target_number),
         "-t",
-        reaction.target_timestamp,
+        quote(reaction.target_timestamp),
         "-e",
-        reaction.emoji,
+        quote(reaction.emoji),
         "-r",
     ]
 

@@ -17,7 +17,7 @@ async def get_groups(number: str, detailed: bool = False) -> Any:
     get groups
     """
 
-    cmd = ["-u", number, "listGroups"]
+    cmd = ["-u", quote(number), "listGroups"]
 
     if detailed:
         cmd.append("-d")
@@ -43,7 +43,7 @@ async def create_group(group: GroupCreate, number: str) -> Any:
         cmd.append(f"{settings.signal_upload_path}{group.avatar.filename}")
 
     cmd += ["-m"]
-    cmd += group.members
+    cmd += list(map(quote, group.members))
 
     response = await run_signal_cli_command(cmd)
 
@@ -56,7 +56,7 @@ async def edit_group(id: str, group: GroupUpdate, number: str) -> Any:
     Edit a group. You can't remove a member from a group
     """
 
-    cmd = ["-u", number, "updateGroup", "-g", id]
+    cmd = ["-u", quote(number), "updateGroup", "-g", quote(id)]
 
     if group.name:
         cmd += ["-n", quote(group.name)]
@@ -68,7 +68,7 @@ async def edit_group(id: str, group: GroupUpdate, number: str) -> Any:
 
     if len(group.members) > 0:
         cmd += ["-m"]
-        cmd += group.members
+        cmd += list(map(quote, group.members))
 
     await run_signal_cli_command(cmd)
 
@@ -81,7 +81,7 @@ async def leave_group_by_id(id: str, number: str) -> Any:
     leave a group by id
     """
 
-    cmd = ["-u", number, "quitGroup", "-g", id]
+    cmd = ["-u", quote(number), "quitGroup", "-g", quote(id)]
 
     await run_signal_cli_command(cmd)
 

@@ -1,4 +1,5 @@
 from typing import Any
+from shlex import quote
 
 from fastapi import APIRouter
 
@@ -13,12 +14,12 @@ async def block_numbers_or_groups(block: Block, number: str) -> Any:
     """
     block one or multiple numbers or group id's
     """
-    cmd = ["-u", number, "block"]
+    cmd = ["-u", quote(number), "block"]
 
     if block.group:
         cmd.append("-g")
 
-    cmd += block.numbers
+    cmd += list(map(quote, block.numbers))
 
     await run_signal_cli_command(cmd)
 
@@ -30,12 +31,12 @@ async def unblock_numbers_or_groups(unblock: Block, number: str) -> Any:
     """
     unblock one or multiple numbers or group id's
     """
-    cmd = ["-u", number, "unblock"]
+    cmd = ["-u", quote(number), "unblock"]
 
     if unblock.group:
         cmd.append("-g")
 
-    cmd += unblock.numbers
+    cmd += list(map(quote, unblock.numbers))
 
     await run_signal_cli_command(cmd)
 

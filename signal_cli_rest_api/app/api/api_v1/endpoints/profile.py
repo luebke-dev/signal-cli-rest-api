@@ -18,7 +18,7 @@ async def update_profile(profile: ProfileUpdate, number: str, background_tasks: 
     updates your profile
     """
 
-    cmd = ["-u", number, "updateProfile"]
+    cmd = ["-u", quote(number), "updateProfile"]
 
     if profile.name:
         cmd += ["--n", quote(profile.name)]

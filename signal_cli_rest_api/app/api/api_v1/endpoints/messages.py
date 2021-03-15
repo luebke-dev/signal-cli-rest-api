@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Any, List
+from shlex import quote
 
 from fastapi import APIRouter, BackgroundTasks
 
@@ -31,11 +32,11 @@ async def send_message(
     send message
     """
 
-    cmd = ["-u", number, "send", "-m", message.text]
+    cmd = ["-u", number, "send", "-m", quote(message.text)]
 
     if message.group:
         cmd.append("-g")
-        cmd.append(message.groupId)
+        cmd.append(quote(message.groupId))
     else:
         cmd += message.receivers
 

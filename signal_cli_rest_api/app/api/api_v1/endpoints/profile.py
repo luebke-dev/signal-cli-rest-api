@@ -1,5 +1,6 @@
 import os
 from typing import Any
+from shlex import quote
 
 from fastapi import APIRouter, BackgroundTasks
 
@@ -20,7 +21,7 @@ async def update_profile(profile: ProfileUpdate, number: str, background_tasks: 
     cmd = ["-u", number, "updateProfile"]
 
     if profile.name:
-        cmd += ["--n", profile.name]
+        cmd += ["--n", quote(profile.name)]
 
     if profile.remove_avatar:
         cmd.append("--remove-avatar")

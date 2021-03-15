@@ -1,4 +1,5 @@
 from typing import Any, List
+from shlex import quote
 
 from fastapi import APIRouter
 
@@ -34,7 +35,7 @@ async def create_group(group: GroupCreate, number: str) -> Any:
     Create Group
     """
 
-    cmd = ["updateGroup", "-n", group.name]
+    cmd = ["updateGroup", "-n", quote(group.name)]
 
     if group.avatar:
         cmd.append("-a")
@@ -58,7 +59,7 @@ async def edit_group(id: str, group: GroupUpdate, number: str) -> Any:
     cmd = ["-u", number, "updateGroup", "-g", id]
 
     if group.name:
-        cmd += ["-n", group.name]
+        cmd += ["-n", quote(group.name)]
 
     if group.avatar:
         cmd.append("-a")

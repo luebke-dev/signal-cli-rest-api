@@ -40,7 +40,7 @@ async def register_number(registration: Registration, number: str) -> Any:
         cmd.append("--voice")
 
     if registration.captcha:
-        cmd.append(["--captcha", registration.captcha] )
+        cmd.extend(["--captcha", registration.captcha] )
 
     await run_signal_cli_command(cmd)
     return registration

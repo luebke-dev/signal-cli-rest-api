@@ -10,3 +10,4 @@ class Verification(BaseModel):
 
 class Registration(BaseModel):
     voice_verification: bool = False
+    captcha: Optional[str]

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AttachmentIn(BaseModel):
@@ -102,7 +102,23 @@ class Verification(BaseModel):
     verification_code: str
     pin: Optional[str] = None
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "verification_code": "123456",
+                "pin": None
+            }
+        }
+
 
 class Registration(BaseModel):
     voice_verification: bool = False
-    captcha: Optional[str]
+    captcha: Optional[str] = None
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "voice_verification": True,
+                "captcha": None
+            }
+        }

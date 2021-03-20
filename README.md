@@ -25,7 +25,7 @@ If you install signal-cli-rest-api through pip you need to manually install [sig
 # you can change the directory by setting the SIGNAL_CONFIG_PATH env var to the desired path
 # e.g. export SIGNAL_CONFIG_PATH=/opt/signal
 pip install signal-cli-rest-api
-uvicorn signal_cli_rest_api.app.main:app --host 0.0.0.0 --port 8000
+uvicorn signal_cli_rest_api.main:app --host 0.0.0.0 --port 8000
 ```
 
 ### Docker

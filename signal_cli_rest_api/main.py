@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from signal_cli_rest_api.api import block, groups, messages, profile, register
 
 app = FastAPI(title="signal-cli-rest-api")

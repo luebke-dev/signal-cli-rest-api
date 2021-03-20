@@ -5,8 +5,7 @@ from fastapi import APIRouter, BackgroundTasks
 
 from signal_cli_rest_api.config import settings
 from signal_cli_rest_api.schemas import ProfileUpdate
-from signal_cli_rest_api.utils import (run_signal_cli_command,
-                                           save_attachment)
+from signal_cli_rest_api.utils import run_signal_cli_command, save_attachment
 
 router = APIRouter()
 

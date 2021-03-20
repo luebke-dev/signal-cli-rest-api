@@ -65,3 +65,44 @@ class ReactionOut(BaseModel):
     target_number: str
     target_timestamp: str
     emoji: str
+
+
+
+class Block(BaseModel):
+    numbers: List[str]
+    group: Optional[bool] = False
+
+class GroupCreate(BaseModel):
+    name: str
+    members: List[str] = []
+    avatar: Optional[AttachmentIn] = None
+
+
+class GroupUpdate(BaseModel):
+    name: Optional[str]
+    members: List[str] = []
+    avatar: Optional[AttachmentIn] = None
+
+
+class GroupOut(BaseModel):
+    id: Optional[str] = None
+    name: Optional[str] = None
+    members: List[str] = []
+    blocked: bool = False
+    active: bool = True
+
+
+class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    avatar: Optional[AttachmentIn] = None
+    remove_avatar: Optional[bool] = False
+
+
+class Verification(BaseModel):
+    verification_code: str
+    pin: Optional[str] = None
+
+
+class Registration(BaseModel):
+    voice_verification: bool = False
+    captcha: Optional[str]

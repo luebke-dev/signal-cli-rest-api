@@ -6,8 +6,8 @@ import pyqrcode
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 
-from signal_cli_rest_api.app.schemas import Registration, Verification
-from signal_cli_rest_api.app.utils import run_signal_cli_command
+from signal_cli_rest_api.schemas import Registration, Verification
+from signal_cli_rest_api.utils import run_signal_cli_command
 
 router = APIRouter()
 
@@ -41,7 +41,7 @@ async def register_number(registration: Registration, number: str) -> Any:
         cmd.append("--voice")
 
     if registration.captcha:
-        cmd.append(["--captcha", quote(registration.captcha)] )
+        cmd.extend(["--captcha", quote(registration.captcha)] )
 
     await run_signal_cli_command(cmd)
     return registration

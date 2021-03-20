@@ -3,10 +3,13 @@ from shlex import quote
 
 from fastapi import APIRouter
 
-from signal_cli_rest_api.app.config import settings
-from signal_cli_rest_api.app.schemas import GroupCreate, GroupOut, GroupUpdate
-from signal_cli_rest_api.app.utils import (read_groups, run_signal_cli_command,
-                                           save_attachment)
+from signal_cli_rest_api.config import settings
+from signal_cli_rest_api.schemas import GroupCreate, GroupOut, GroupUpdate
+from signal_cli_rest_api.utils import (
+    read_groups,
+    run_signal_cli_command,
+    save_attachment,
+)
 
 router = APIRouter()
 

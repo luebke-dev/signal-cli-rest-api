@@ -6,10 +6,8 @@ import aiofiles
 import httpx
 from fastapi import HTTPException
 
-from .config import settings
-from .schemas import AttachmentIn
-
-ALGORITHM = "HS256"
+from signal_cli_rest_api.config import settings
+from signal_cli_rest_api.schemas import AttachmentIn
 
 
 def read_groups(groups_string: str):

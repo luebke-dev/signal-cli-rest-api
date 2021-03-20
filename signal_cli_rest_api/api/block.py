@@ -3,8 +3,8 @@ from shlex import quote
 
 from fastapi import APIRouter
 
-from signal_cli_rest_api.app.schemas import Block
-from signal_cli_rest_api.app.utils import run_signal_cli_command
+from signal_cli_rest_api.schemas import Block
+from signal_cli_rest_api.utils import run_signal_cli_command
 
 router = APIRouter()
 

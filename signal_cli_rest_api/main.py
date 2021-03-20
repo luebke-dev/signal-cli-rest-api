@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from signal_cli_rest_api.api import block, groups, messages, profile, register
 
-app = FastAPI(title="signal-cli-rest-api")
+app = FastAPI(title="signal-cli-rest-api", version="0.1.97")
 
 app.include_router(block.router, prefix="/block", tags=["block"])
 app.include_router(groups.router, prefix="/groups", tags=["groups"])

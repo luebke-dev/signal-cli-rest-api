@@ -1,5 +1,9 @@
-__pycache__
-.vscode
 signal-cli-config
-poetry.lock
 dist
+
+# ide
+.vscode
+
+# python
+__pycache__
+.python-version

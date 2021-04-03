@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class AttachmentIn(BaseModel):
@@ -67,10 +67,10 @@ class ReactionOut(BaseModel):
     emoji: str
 
 
-
 class Block(BaseModel):
     numbers: List[str]
     group: Optional[bool] = False
+
 
 class GroupCreate(BaseModel):
     name: str
@@ -103,12 +103,7 @@ class Verification(BaseModel):
     pin: Optional[str] = None
 
     class Config:
-        schema_extra = {
-            "example": {
-                "verification_code": "123456",
-                "pin": None
-            }
-        }
+        schema_extra = {"example": {"verification_code": "123456", "pin": None}}
 
 
 class Registration(BaseModel):
@@ -116,9 +111,4 @@ class Registration(BaseModel):
     captcha: Optional[str] = None
 
     class Config:
-        schema_extra = {
-            "example": {
-                "voice_verification": True,
-                "captcha": None
-            }
-        }
+        schema_extra = {"example": {"voice_verification": True, "captcha": None}}

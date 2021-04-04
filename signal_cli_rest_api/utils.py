@@ -46,20 +46,24 @@ def read_groups(groups_string: str):
                 "members": members,
             }
         )
-                   
+
     return groups
 
 
 async def save_attachment(attachment: AttachmentIn):
     if attachment.url is None and attachment.content is None:
         raise HTTPException(status_code=422)
-    async with aiofiles.open(f"{settings.signal_upload_path}{attachment.filename}", "wb") as file:
+    async with aiofiles.open(
+        f"{settings.signal_upload_path}{attachment.filename}", "wb"
+    ) as file:
         content = b""
         if attachment.url:
             async with httpx.AsyncClient() as client:
                 r = await client.get(attachment.url, allow_redirects=True)
                 if r.status_code != 200:
-                    raise HTTPException(status_code=400, detail="Downloading image failed")
+                    raise HTTPException(
+                        status_code=400, detail="Downloading image failed"
+                    )
                 content = r.content
         elif attachment.content:
             content = base64.b64decode(attachment.content)
@@ -72,12 +76,17 @@ async def run_signal_cli_command(cmd: List[str], wait: bool = True) -> Any:
 
     full_cmd = " ".join(base_cmd + cmd)
 
-    process = await asyncio.subprocess.create_subprocess_shell(full_cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    process = await asyncio.subprocess.create_subprocess_shell(
+        full_cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+    )
 
     if wait:
         stdout, stderr = await process.communicate()
         if stderr:
-            raise HTTPException(status_code=500, detail=f"Starting signal-cli process failed: {stderr.decode()}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Starting signal-cli process failed: {stderr.decode()}",
+            )
         return stdout.decode()
 
     return await process.stdout.readline()

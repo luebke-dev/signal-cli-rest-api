@@ -111,4 +111,4 @@ class Registration(BaseModel):
     captcha: Optional[str] = None
 
     class Config:
-        schema_extra = {"example": {"voice_verification": True, "captcha": None}}
+        schema_extra = {"example": {"voice_verification": True, "captcha": ""}}

@@ -22,7 +22,7 @@ async def get_messages(number: str) -> Any:
     get messages
     """
 
-    response = await run_signal_cli_command(["-u", number, "receive", "--json"])
+    response = await run_signal_cli_command(["-u", number, "--output=json", "receive"])
     return [json.loads(m) for m in response.split("\n") if m != ""]
 
 

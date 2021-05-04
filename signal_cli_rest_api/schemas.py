@@ -48,7 +48,6 @@ class Envelope(BaseModel):
     sourceDevice: int
     relay: Any
     timestamp: str
-    isReceipt: bool
     dataMessage: Optional[DataMessage] = None
 
 

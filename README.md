@@ -1,4 +1,4 @@
-As I switch from Signal to Matrix this project isnt maintained anymore. If you still need it i recomment using this fork https://github.com/kahrpatrick/signal-cli-rest-api
+As I switched from Signal to Matrix this project isnt maintained anymore. If you still need it i recomment using this fork https://github.com/kahrpatrick/signal-cli-rest-api
 
 
 

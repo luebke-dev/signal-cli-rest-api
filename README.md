@@ -1,3 +1,8 @@
+As I switch from Signal to Matrix this project isnt maintained anymore. If you still need it i recomment using this fork https://github.com/kahrpatrick/signal-cli-rest-api
+
+
+
+
 # signal-cli-rest-api
 signal-cli-rest-api is a wrapper around [signal-cli](https://github.com/AsamK/signal-cli) and allows you to interact with it through http requests.
 

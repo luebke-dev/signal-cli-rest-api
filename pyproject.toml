@@ -8,7 +8,7 @@ authors = ["Sebastian Noel Lübke <sebastian@luebke.io>"]
 
 [tool.poetry.dependencies]
 python = "~3.8"
-fastapi = "^0.58.0"
+fastapi = ">=0.58,<0.66"
 uvicorn = "^0.11.5"
 python-jose = "^3.1.0"
 pyqrcode = "^1.2.1"
